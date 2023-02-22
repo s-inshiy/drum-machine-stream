@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+.pad-bank {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  width: 100%;
+  background: yellow;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.drum-pad {
+  padding: 10px;
+  color: blue;
+  font-size: 24px;
+  cursor: pointer;
+  border: 1px solid blue;
+  border-radius: 10px;
+}
+
+.drum-pad:hover {
+  background-color: red;
+  color: black;
+}
