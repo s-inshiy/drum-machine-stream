@@ -1,38 +1,35 @@
-import { useState } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import reactLogo from './assets/react.svg';
+import { DRUMS } from './constants/index';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
-  // const [user, setUser] = useState<{
-  //   name: null | string;
-  //   age: null | number;
-  // }>({
-  //   name: null,
-  //   age: null,
-  // });
+  const audioRef = useRef<any>(null);
+  const [isPlaying, setIsPlaying] =
+    useState(false);
 
-  const handleClick = () => {
-    // setUser({
-    //   name: 'Serhii',
-    //   age: 96,
-    // });
-    setCount(count + 1);
-  };
+  function handlePlay() {
+    const audio = audioRef.current;
+    if (audio.paused) {
+      audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  }
+
+  useEffect(() => {
+    console.log(DRUMS);
+  }, []);
 
   return (
     <div className="App">
       <div>
-        <a
-          href="https://vitejs.dev"
-          target="_blank"
-        >
-          <img
-            src="/vite.svg"
-            className="logo"
-            alt="Vite logo"
-          />
-        </a>
         <a
           href="https://reactjs.org"
           target="_blank"
@@ -44,20 +41,30 @@ function App() {
           />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <div className="pad-bank">
+        {DRUMS.map(
+          ({ keyTrigger, url }, index) => (
+            <div
+              key={index}
+              className="drum-pad"
+              onClick={handlePlay}
+            >
+              <audio
+                ref={audioRef}
+                src={url}
+              ></audio>
+              {keyTrigger}
+            </div>
+          )
+        )}
+      </div>
       <div className="card">
-        <button onClick={handleClick}>
-          Push the Like Button! {count} 
-        </button>
+        <button>Push the Like Button!</button>
         <p>
           Edit <code>src/App.tsx</code> and
           save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to
-        learn more
-      </p>
     </div>
   );
 }
