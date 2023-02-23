@@ -46,23 +46,28 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
   width: 100%;
-  background: yellow;
+  background: darkgrey;
   max-width: 400px;
   margin: 0 auto;
-  padding: 15px;
-  border-radius: 15px;
+  padding: 15px 10px 25px 15px;
+  justify-items: center;
 }
 
 .drum-pad {
-  padding: 10px;
-  color: blue;
-  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 80px;
+  box-sizing: border-box;
   cursor: pointer;
-  border: 1px solid blue;
-  border-radius: 10px;
+  background-color: grey; 
+  margin-top: 10px; 
+  box-shadow: black 3px 3px 5px;
+  font-weight: bold;
 }
 
 .drum-pad:hover {
-  background-color: red;
+  background-color: cornflowerblue;
   color: black;
 }
