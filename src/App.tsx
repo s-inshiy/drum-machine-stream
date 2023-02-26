@@ -1,10 +1,10 @@
 import {
   useState,
-  // useEffect,
+  useEffect,
   useRef,
 } from 'react';
 import reactLogo from './assets/react.svg';
-import { DRUMS } from './constants/index';
+import { HEATER_KIT } from './constants/index';
 import './App.css';
 
 function App() {
@@ -15,25 +15,54 @@ function App() {
     Array<HTMLAudioElement | null>
   >([]);
 
-  const handlePlay =
-    (index: number) => () => {
-      setIsPlaying(true);
-      const audioElement =
-        audioRefs.current[index];
+  const [
+    selectedKeyCode,
+    setSelectedKeyCode,
+  ] = useState<number | null>(null);
 
-      if (audioElement) {
-        audioElement.play();
-      }
+  const handleKeyPress = (
+    keyCode: number
+  ) => {
+    setIsPlaying(true);
+    const audioElement =
+      audioRefs.current[keyCode];
+
+    if (audioElement) {
+      audioElement.play();
+    }
+  };
+
+  const handleKeyDown = (
+    // @ts-ignore
+    { keyCode }: KeyboardEvent
+  ) => {
+    handleKeyPress(keyCode);
+    setSelectedKeyCode(keyCode);
+    setTimeout(() => {
+      setSelectedKeyCode(null);
+    }, 100);
+  };
+
+  useEffect(() => {
+    // Add event listener
+    window.addEventListener(
+      'keydown',
+      handleKeyDown
+    );
+
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener(
+        'keydown',
+        handleKeyDown
+      );
     };
+  }, []);
 
   const handleEnded =
     (ended: boolean) => () => {
       setIsPlaying(ended);
     };
-
-  // useEffect(() => {
-  //   console.log(DRUMS);
-  // }, []);
 
   return (
     <div className="App">
@@ -51,17 +80,29 @@ function App() {
         <h2>Drum Machine</h2>
       </div>
       <div className="pad-bank">
-        {DRUMS.map(
-          ({ keyTrigger, url }, index) => (
+        {HEATER_KIT.map(
+          ({
+            keyTrigger,
+            keyCode,
+            url,
+            id,
+          }) => (
             <div
-              key={index}
-              className="drum-pad"
-              onClick={handlePlay(index)}
+              key={id}
+              className={`drum-pad ${
+                selectedKeyCode === keyCode
+                  ? 'drum-pad--active'
+                  : ''
+              }`}
+              onClick={() => {
+                handleKeyPress(keyCode);
+              }}
             >
               <audio
                 ref={(audio) =>
-                  (audioRefs.current[index] =
-                    audio)
+                  (audioRefs.current[
+                    keyCode
+                  ] = audio)
                 }
                 src={url}
                 onEnded={handleEnded(false)}
@@ -75,7 +116,7 @@ function App() {
         <h3>
           {isPlaying
             ? 'Music is playing, let me dance :D'
-            : 'Hmm, where the music?'}
+            : 'Hmm, where the music !?'}
         </h3>
       </div>
     </div>
